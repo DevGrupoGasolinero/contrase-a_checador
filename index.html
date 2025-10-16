@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de 4 Dígitos</title>
+    <title>Generador Clave ZKTeco</title>
     <style>
-        /* CSS Básico para centrarlo y que se vea limpio */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: grid;
@@ -13,6 +12,7 @@
             min-height: 90vh;
             background-color: #f4f4f9;
             color: #333;
+            padding: 20px;
         }
         .container {
             background: #ffffff;
@@ -20,8 +20,31 @@
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             text-align: center;
-            width: 300px;
+            width: 350px;
         }
+        h2 {
+            margin-top: 0;
+        }
+        
+        /* Estilos para la lista de instrucciones */
+        .instrucciones {
+            text-align: left;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .instrucciones ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .instrucciones li {
+            margin-bottom: 8px;
+        }
+        
         input[type="text"] {
             width: 80%;
             padding: 10px;
@@ -45,60 +68,81 @@
             background-color: #0056b3;
         }
         #resultado {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             margin-top: 1rem;
             min-height: 1.5rem; /* Evita que la caja salte */
+            word-wrap: break-word; /* Asegura que la clave no se salga */
         }
         .error {
             color: #d93025; /* Color rojo para errores */
+            font-size: 1rem;
         }
         .exito {
-            color: #1a73e8; /* Color azul/verde para éxito */
+            color: #1a73e8; /* Color azul para éxito */
+        }
+        .aviso {
+            font-weight: bold;
+            color: #d93025;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Multiplicador de 4 Dígitos</h2>
-        <p>Ingresa exactamente 4 dígitos:</p>
+        <h2>Generador Clave ZKTeco</h2>
         
-        <input type="text" id="numeroInput" placeholder="Ej: 1234">
+        <p>Ingresa la Hora (HH) y Minuto (MM) exactos del checador:</p>
         
-        <button onclick="calcular()">Calcular</button>
+        <input type="text" id="tiempoInput" placeholder="HHMM" maxlength="4">
+        
+        <button onclick="generarClave()">Generar Clave</button>
         
         <p id="resultado"></p>
+
+        <div class="instrucciones">
+            <strong>Instrucciones de Desbloqueo:</strong>
+            <ul>
+                <li>Presiona "M/OK" en el checador por 3 segundos.</li>
+                <li>Ingresa la clave general: <strong>8888</strong> y presiona OK.</li>
+                <li>Mira la hora y minuto exactos en la pantalla del checador.</li>
+                <li>Ingresa esos 4 dígitos (HHMM) en esta página y presiona "Generar".</li>
+                <li>Ingresa la <strong>Clave Generada</strong> en el checador y presiona OK.</li>
+            </ul>
+            <p class="aviso">¡Recuerda que tienes menos de 1 minuto para ingresar la clave generada!</p>
+        </div>
     </div>
 
     <script>
-        // JavaScript para la lógica
-        function calcular() {
+        // JavaScript con la nueva lógica
+        function generarClave() {
             // 1. Obtener los elementos del HTML
-            const input = document.getElementById('numeroInput');
+            const input = document.getElementById('tiempoInput');
             const resultadoEl = document.getElementById('resultado');
             const valor = input.value;
 
-            // 2. Validar que sean exactamente 4 dígitos numéricos
-            // Esta expresión regular (regex) comprueba:
-            // ^ = inicio de la cadena
-            // \d = un dígito (0-9)
-            // {4} = exactamente 4 veces
-            // $ = fin de la cadena
+            // 2. Validar que sean exactamente 4 dígitos numéricos (HHMM)
             const regex = /^\d{4}$/;
 
             if (regex.test(valor)) {
-                // 3. Si es válido, hacer el cálculo
-                const numero = parseInt(valor); // Convertir texto a número
-                const cuadrado = numero * numero;
+                // 3. Si es válido, aplicar el algoritmo
+                
+                // Convertir el valor de texto a número (ej: "0930" -> 930)
+                const hhmm = parseInt(valor); 
+                
+                // Calcular la base: 9999 - HHMM
+                const base = 9999 - hhmm;
+                
+                // Calcular el cuadrado de la base
+                const claveGenerada = base * base;
                 
                 // 4. Mostrar el resultado
-                resultadoEl.textContent = `Resultado: ${cuadrado.toLocaleString('es-MX')}`;
-                resultadoEl.className = 'exito'; // Aplicar clase de éxito
+                resultadoEl.textContent = `Clave Generada: ${claveGenerada}`;
+                resultadoEl.className = 'exito';
             } else {
                 // 5. Si no es válido, mostrar error
-                resultadoEl.textContent = 'Error: Debes ingresar exactamente 4 dígitos.';
-                resultadoEl.className = 'error'; // Aplicar clase de error
+                resultadoEl.textContent = 'Error: Debes ingresar 4 dígitos (HHMM).';
+                resultadoEl.className = 'error';
             }
         }
     </script>
