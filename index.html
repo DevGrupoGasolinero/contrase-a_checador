@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de 4 Dígitos</title>
+    <style>
+        /* CSS Básico para centrarlo y que se vea limpio */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            min-height: 90vh;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            width: 300px;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            min-height: 1.5rem; /* Evita que la caja salte */
+        }
+        .error {
+            color: #d93025; /* Color rojo para errores */
+        }
+        .exito {
+            color: #1a73e8; /* Color azul/verde para éxito */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Multiplicador de 4 Dígitos</h2>
+        <p>Ingresa exactamente 4 dígitos:</p>
+        
+        <input type="text" id="numeroInput" placeholder="Ej: 1234">
+        
+        <button onclick="calcular()">Calcular</button>
+        
+        <p id="resultado"></p>
+    </div>
+
+    <script>
+        // JavaScript para la lógica
+        function calcular() {
+            // 1. Obtener los elementos del HTML
+            const input = document.getElementById('numeroInput');
+            const resultadoEl = document.getElementById('resultado');
+            const valor = input.value;
+
+            // 2. Validar que sean exactamente 4 dígitos numéricos
+            // Esta expresión regular (regex) comprueba:
+            // ^ = inicio de la cadena
+            // \d = un dígito (0-9)
+            // {4} = exactamente 4 veces
+            // $ = fin de la cadena
+            const regex = /^\d{4}$/;
+
+            if (regex.test(valor)) {
+                // 3. Si es válido, hacer el cálculo
+                const numero = parseInt(valor); // Convertir texto a número
+                const cuadrado = numero * numero;
+                
+                // 4. Mostrar el resultado
+                resultadoEl.textContent = `Resultado: ${cuadrado.toLocaleString('es-MX')}`;
+                resultadoEl.className = 'exito'; // Aplicar clase de éxito
+            } else {
+                // 5. Si no es válido, mostrar error
+                resultadoEl.textContent = 'Error: Debes ingresar exactamente 4 dígitos.';
+                resultadoEl.className = 'error'; // Aplicar clase de error
+            }
+        }
+    </script>
+
+</body>
+</html>
